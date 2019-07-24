@@ -1,0 +1,12 @@
+/vendor
+tests/*.jasper
+tests/codeCoverage
+
+# IDE
+## Eclipse
+.buildpath
+.project
+.settings
+## PHPStorm
+.idea/
+/composer.lock
