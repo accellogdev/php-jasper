@@ -216,12 +216,24 @@ class PHPJasper
         $returnVar = 0;
 
         chdir($this->pathExecutable);
-        exec($this->command, $output, $returnVar);
+        // para obter a saída de execução, adicionar '2>&1' no final do comando
+        exec($this->command . ' 2>&1', $output, $returnVar);
         if ($returnVar !== 0) {
-            $out = @$output[0];
+            // $out = @$output[0]; // código anterior
+
+            // verifica se é um array
+            if ((array)$output === $output) {
+                $out = implode(",", $output);
+            } else {
+                $out = $output;
+            }
+
+            // quando não consegue identificar a saída
             if ($out == '') {
                 throw new Exception\ErrorCommandExecutable();
             }
+
+            // se chegar aqui, repassa a mensagem de erro
             throw new \Exception("{$out}", 1);
         }
 
