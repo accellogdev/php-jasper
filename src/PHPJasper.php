@@ -143,7 +143,15 @@ class PHPJasper
         if ($options['params']) {
             $this->command .= ' -P ';
             foreach ($options['params'] as $key => $value) {
-                $this->command .= " " . $key . '="' . $value . '" ' . " ";
+                // verifica se o parâmetro é instância de DateTime (considerando que "object" será um DateTime)
+                // utilizando a função "is_a" retorna DateTime, mas na documentação diz que está depreciada a função
+                // if (gettype($value) == 'object') {
+                if (is_a($value, 'DateTime')) {
+                    $value = $value->format('Y-m-d');
+                    $this->command .= " " . $key . '=' . $value . ' ' . " ";
+                } else {
+                    $this->command .= " " . $key . '="' . $value . '" ' . " ";
+                }
             }
         }
 
