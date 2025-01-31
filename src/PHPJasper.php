@@ -105,7 +105,7 @@ class PHPJasper
         $this->command = $this->checkServer();
 
         if ($options['locale']) {
-            $this->command .= " --locale {$options['locale']}";
+            $this->command .= " --locale '{$options['locale']}'";
         }
 
         $this->command .= ' process ';
@@ -116,8 +116,8 @@ class PHPJasper
         if ($options['params']) {
             $this->command .= ' -P ';
             foreach ($options['params'] as $key => $value) {
-                // verifica se o parâmetro é instância de DateTime (considerando que "object" será um DateTime)
-                // utilizando a função "is_a" retorna DateTime, mas na documentação diz que está depreciada a função
+                // verifica se o parametro e instancia de DateTime (considerando que "object" sera um DateTime)
+                // utilizando a funcao "is_a" retorna DateTime, mas na documentacao diz que esta depreciada a funcao
                 // if (gettype($value) == 'object') {
                 if (is_a($value, 'DateTime')) {
                     $value = $value->format('Y-m-d');
@@ -224,19 +224,19 @@ class PHPJasper
         $returnVar = 0;
 
         chdir($this->pathExecutable);
-        // para obter a saída de execução, adicionar '2>&1' no final do comando
+        // para obter a saida de execucao, adicionar '2>&1' no final do comando
         exec($this->command . ' 2>&1', $output, $returnVar);
         if ($returnVar !== 0) {
-            // $out = @$output[0]; // código anterior
+            // $out = @$output[0]; // codigo anterior
 
-            // verifica se é um array
+            // verifica se e um array
             if ((array)$output === $output) {
                 $out = implode(",", $output);
             } else {
                 $out = $output;
             }
 
-            // quando não consegue identificar a saída
+            // quando nao consegue identificar a saida
             if ($out == '') {
                 throw new Exception\ErrorCommandExecutable();
             }
